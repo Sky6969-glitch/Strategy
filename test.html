@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StratFinder - Gaming Strategy Search</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="container py-5">
+            <!-- Header -->
+            <header class="text-center mb-5">
+                <div class="d-flex align-items-center justify-content-center gap-3 mb-3">
+                    <i class="bi bi-controller display-4 text-primary"></i>
+                    <h1 class="display-3 mb-0 text-white">StratFinder</h1>
+                </div>
+                <p class="lead text-light-purple">Discover winning strategies for your favorite games</p>
+            </header>
+
+            <!-- Search Bar -->
+            <div class="row mb-4">
+                <div class="col-lg-8 mx-auto">
+                    <div class="input-group input-group-lg search-box">
+                        <span class="input-group-text bg-dark-card border-purple">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input
+                            type="text"
+                            id="searchInput"
+                            class="form-control bg-dark-card border-purple text-white"
+                            placeholder="Search games, strategies, or techniques..."
+                        >
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="mb-4 text-center">
+                <div class="d-flex flex-wrap gap-2 align-items-center justify-content-center mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-funnel text-light-purple"></i>
+                        <span class="text-light-purple">Category:</span>
+                    </div>
+                    <div class="btn-group" role="group" id="categoryFilters">
+                        <button type="button" class="btn btn-filter active" data-category="All">All</button>
+                        <button type="button" class="btn btn-filter" data-category="MOBA">MOBA</button>
+                        <button type="button" class="btn btn-filter" data-category="FPS">FPS</button>
+                        <button type="button" class="btn btn-filter" data-category="Strategy">Strategy</button>
+                        <button type="button" class="btn btn-filter" data-category="RPG">RPG</button>
+                        <button type="button" class="btn btn-filter" data-category="Battle Royale">Battle Royale</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Difficulty Filters -->
+            <div class="mb-5 text-center">
+                <div class="d-flex flex-wrap gap-2 align-items-center justify-content-center">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-bullseye text-light-purple"></i>
+                        <span class="text-light-purple">Difficulty:</span>
+                    </div>
+                    <div class="btn-group" role="group" id="difficultyFilters">
+                        <button type="button" class="btn btn-filter active" data-difficulty="All">All</button>
+                        <button type="button" class="btn btn-filter" data-difficulty="Beginner">Beginner</button>
+                        <button type="button" class="btn btn-filter" data-difficulty="Intermediate">Intermediate</button>
+                        <button type="button" class="btn btn-filter" data-difficulty="Advanced">Advanced</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Strategy Cards Grid -->
+            <div class="row g-4" id="strategiesGrid">
+                <!-- Cards will be dynamically inserted here -->
+            </div>
+
+            <!-- No Results Message -->
+            <div id="noResults" class="text-center py-5 d-none">
+                <i class="bi bi-controller display-1 text-muted mb-3"></i>
+                <p class="h4 text-muted">No strategies found matching your criteria</p>
+                <p class="text-muted">Try adjusting your filters or search terms</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        // Strategy Data
+        const strategies = [
+            {
+                id: 1,
+                game: 'League of Legends',
+                title: 'Early Game Jungle Dominance',
+                category: 'MOBA',
+                difficulty: 'Advanced',
+                description: 'Master the art of early game pressure through efficient jungle pathing and gank timing to control objectives.',
+                image: 'https://images.unsplash.com/photo-1759701546851-1d903ac1a2e2?w=400',
+                views: '12.5K',
+                rating: 4.8
+            },
+            {
+                id: 2,
+                game: 'Valorant',
+                title: 'Site Execution & Crossfire Setup',
+                category: 'FPS',
+                difficulty: 'Intermediate',
+                description: 'Learn perfect site execution strategies with coordinated utility usage and crossfire positioning for attack rounds.',
+                image: 'https://images.unsplash.com/photo-1759701547121-d5e4188e3d3b?w=400',
+                views: '18.2K',
+                rating: 4.9
+            },
+            {
+                id: 3,
+                game: 'Dota 2',
+                title: 'Lane Control & Wave Management',
+                category: 'MOBA',
+                difficulty: 'Advanced',
+                description: 'Advanced techniques for controlling creep equilibrium and denying enemy farm while maximizing your own gold.',
+                image: 'https://images.unsplash.com/photo-1759701547393-b505730954dc?w=400',
+                views: '9.8K',
+                rating: 4.7
+            },
+            {
+                id: 4,
+                game: 'CS2',
+                title: 'Economy Management Guide',
+                category: 'FPS',
+                difficulty: 'Beginner',
+                description: 'Complete guide to managing your team economy, when to eco, force buy, or full buy for maximum impact.',
+                image: 'https://images.unsplash.com/photo-1759701547353-7ecd687a72c7?w=400',
+                views: '25.1K',
+                rating: 4.9
+            },
+            {
+                id: 5,
+                game: 'Starcraft II',
+                title: 'Build Order Optimization',
+                category: 'Strategy',
+                difficulty: 'Advanced',
+                description: 'Perfect your build orders for each matchup with precise timing and resource allocation strategies.',
+                image: 'https://images.unsplash.com/photo-1759701546763-3473c6fcc803?w=400',
+                views: '7.3K',
+                rating: 4.6
+            },
+            {
+                id: 6,
+                game: 'Apex Legends',
+                title: 'Rotation & Zone Control',
+                category: 'FPS',
+                difficulty: 'Intermediate',
+                description: 'Master optimal rotation paths and high-ground positioning to dominate late-game circles.',
+                image: 'https://images.unsplash.com/photo-1759701547036-bf7d7b05cc52?w=400',
+                views: '14.7K',
+                rating: 4.8
+            },
+            {
+                id: 7,
+                game: 'Overwatch 2',
+                title: 'Ultimate Economy & Combo Execution',
+                category: 'FPS',
+                difficulty: 'Intermediate',
+                description: 'Coordinate ultimate abilities for devastating team fight wins and learn when to invest or save ults.',
+                image: 'https://images.unsplash.com/photo-1759701547421-2972dd046ba4?w=400',
+                views: '11.2K',
+                rating: 4.7
+            },
+            {
+                id: 8,
+                game: 'Teamfight Tactics',
+                title: 'Tempo & Econ Balance',
+                category: 'Strategy',
+                difficulty: 'Beginner',
+                description: 'Learn to balance health, gold economy, and power spikes for consistent top 4 placements.',
+                image: 'https://images.unsplash.com/photo-1759701547797-15ee208edc40?w=400',
+                views: '16.4K',
+                rating: 4.8
+            }
+        ];
+
+        // State
+        let selectedCategory = 'All';
+        let selectedDifficulty = 'All';
+        let searchQuery = '';
+
+        // Create strategy card HTML
+        function createStrategyCard(strategy) {
+            const difficultyClass =
+                strategy.difficulty === 'Beginner' ? 'badge-success' :
+                strategy.difficulty === 'Intermediate' ? 'badge-warning' : 'badge-danger';
+
+            return `
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card strategy-card h-100">
+                        <div class="card-img-wrapper">
+                            <img src="${strategy.image}" class="card-img-top" alt="${strategy.game}">
+                            <div class="card-img-overlay">
+                                <span class="badge bg-primary category-badge">${strategy.category}</span>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="bi bi-lightning-charge text-primary"></i>
+                                <h6 class="card-subtitle text-primary mb-0">${strategy.game}</h6>
+                            </div>
+                            <h5 class="card-title text-white">${strategy.title}</h5>
+                            <p class="card-text text-muted flex-grow-1">${strategy.description}</p>
+                            <div class="card-footer-custom d-flex justify-content-between align-items-center">
+                                <div class="d-flex gap-3">
+                                    <small class="text-muted">
+                                        <i class="bi bi-graph-up"></i> ${strategy.views}
+                                    </small>
+                                    <small class="text-warning">
+                                        <i class="bi bi-star-fill"></i> ${strategy.rating}
+                                    </small>
+                                </div>
+                                <span class="badge ${difficultyClass}">${strategy.difficulty}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Filter strategies
+        function filterStrategies() {
+            const filtered = strategies.filter(strategy => {
+                const matchesSearch =
+                    strategy.game.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    strategy.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    strategy.description.toLowerCase().includes(searchQuery.toLowerCase());
+
+                const matchesCategory = selectedCategory === 'All' || strategy.category === selectedCategory;
+                const matchesDifficulty = selectedDifficulty === 'All' || strategy.difficulty === selectedDifficulty;
+
+                return matchesSearch && matchesCategory && matchesDifficulty;
+            });
+
+            return filtered;
+        }
+
+        // Render strategies
+        function renderStrategies() {
+            const grid = document.getElementById('strategiesGrid');
+            const noResults = document.getElementById('noResults');
+            const filtered = filterStrategies();
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                noResults.classList.remove('d-none');
+            } else {
+                noResults.classList.add('d-none');
+                grid.innerHTML = filtered.map(createStrategyCard).join('');
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            renderStrategies();
+        });
+
+        document.querySelectorAll('#categoryFilters .btn-filter').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('#categoryFilters .btn-filter').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                selectedCategory = e.target.dataset.category;
+                renderStrategies();
+            });
+        });
+
+        document.querySelectorAll('#difficultyFilters .btn-filter').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('#difficultyFilters .btn-filter').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                selectedDifficulty = e.target.dataset.difficulty;
+                renderStrategies();
+            });
+        });
+
+        // Initial render
+        renderStrategies();
+    </script>
+</body>
+</html>
